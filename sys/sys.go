@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var VERSION string = "1.0.0"
+var VERSION string = "0.0.9"
 
 var COMMANDS []string = []string{
 	COMMANDS_CREATE,
