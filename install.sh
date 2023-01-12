@@ -17,12 +17,14 @@
 #  bash install script
 #  
 
-V_VERSION="v$1"
+V_VERSION="$1"
 V_GOARCH=$2
 
 
 if [ -z "$V_VERSION" ]; then
     V_VERSION=`sudo curl https://github.com/anigkus/kush/releases | grep -oiE "<a([^>]+) class=\"Link--primary\">([^<]+)</a>" | awk -F '>' '{print $2}' | awk -F '<' '{print $1}'`
+elif
+    V_VERSION ="v$V_VERSION"
 fi
 
 OS="`uname`"
