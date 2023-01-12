@@ -14,6 +14,12 @@ Kush is available on Linux, macOS and Windows platforms.
 curl -sS https://raw.githubusercontent.com/anigkus/kush/main/install.sh | bash
 ```
 
+OR
+
+```
+curl -sS https://raw.githubusercontent.com/anigkus/kush/main/install.sh | bash -s -- 0.0.9
+```
+
 # Command Help
 
 ```
