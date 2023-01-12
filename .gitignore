@@ -15,5 +15,5 @@
 # vendor/
 
 # kush
-.build
+build/
 .build.md
