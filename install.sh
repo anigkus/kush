@@ -17,7 +17,7 @@
 #  bash install script
 #  
 
-V_VERSION=$1
+V_VERSION="v$1"
 V_GOARCH=$2
 
 
@@ -55,4 +55,4 @@ case $OS in
     ;;
 esac
 
-sudo curl -sLX GET https://github.com/anigkus/kush/releases/download/v$V_VERSION/$V_FILE | sudo tar -xz -C /usr/local/bin/ 2>/dev/null
+sudo curl -sLX GET https://github.com/anigkus/kush/releases/download/$V_VERSION/$V_FILE | sudo tar -xz -C /usr/local/bin/ 2>/dev/null

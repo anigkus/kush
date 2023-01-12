@@ -37,7 +37,7 @@ if [ ! -z "$V_GOOS" ] || [ ! -z "$V_GOARCH" ]; then
     if [[ "$V_GOARCH" =~ ^[32|386]$ ]]; then
         V_ARCH='32'
     fi
-    CGO_ENABLED=0 GOOS=$V_GOOS GOARCH=$V_GOARCH go build -ldflags="-s -w" -o build/$V_GOOS/$V_GOARCH/$V_FILE  && upx --best --lzma build/$V_GOOS/$V_GOARCH/$V_FILE && cd build/$V_GOOS/$V_GOARCH && tar -czf kush_$V_GOOS_x$V_ARCH.tar.gz $V_FILE && rm -f $V_FILE && cd -
+    CGO_ENABLED=0 GOOS=$V_GOOS GOARCH=$V_GOARCH go build -ldflags="-s -w" -o build/$V_GOOS/$V_GOARCH/$V_FILE  && upx --best --lzma build/$V_GOOS/$V_GOARCH/$V_FILE && cd build/$V_GOOS/$V_GOARCH && tar -czf kush_"$V_GOOS"_"$V_ARCH".tar.gz $V_FILE && rm -f $V_FILE && cd -
 else
     OS="`uname`"
     case $OS in
