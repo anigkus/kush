@@ -25,6 +25,11 @@ goarch=$2
 arch="64"
 file='kush'
 
+if [ ! -x "$(command -v go)" ] ||  [ ! -x "$(command -v upx)" ] ||  [ ! -x "$(command -v tar)" ]; then
+  echo 'Error: [ go | upx | tar ] is not installed.' >&2
+  exit 1
+fi
+
 if [ ! -z "$goos" ] && [ ! -z "$goarch" ]; then
     if [ "$goos" == "windows" ]; then
         file='kush.exe'
