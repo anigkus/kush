@@ -3,6 +3,17 @@
 
 Kush is a cross-platform command-line SSH remote address connection tool.
 
+# Installation
+
+Kush is available on Linux, macOS and Windows platforms.
+
+* Binaries for Linux, Windows and Mac are available as tarballs in the [release](https://github.com/anigkus/kush/releases) page.
+
+* Via Bash for Linux and macOS
+```
+curl -sS https://raw.githubusercontent.com/anigkus/kush/main/install.sh | bash
+```
+
 # Command Help
 
 ```
