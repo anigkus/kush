@@ -52,7 +52,7 @@ OPTIONS:
 
 Run 'kush COMMAND --help' for more information on a command.
 
-To get more help with kush, check out our guides at https://kush.github.com/go/guides/
+To get more help with kush, check out our guides at https://github.com/anigkus/kush
 ```
 
 # Special Parameter
