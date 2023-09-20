@@ -15,7 +15,7 @@ import (
 	"github.com/anigkus/kush/util"
 )
 
-//entry
+// entry
 func Main(args []string) {
 	var size int = len(args)
 	if size <= 1 {
@@ -26,9 +26,9 @@ func Main(args []string) {
 	switch outArg {
 	case "":
 		help.HelpUsage(args)
-	case "-V", "--version":
+	case sys.OPTION_S_VERSION, sys.OPTION_L_VERSION:
 		help.Version()
-	case "-H", "--help":
+	case sys.OPTION_S_HELP, sys.OPTION_L_HELP:
 		help.HelpUsage(args)
 	case sys.COMMANDS_CREATE:
 		//remove self filename

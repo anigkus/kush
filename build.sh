@@ -20,6 +20,8 @@
 #go args
 V_GOOS=$1
 V_GOARCH=$2
+#V_GOOS=${V_GOOS:-darwin}
+#V_GOARCH=${V_GOARCH:-amd64}
 
 # build args
 V_ARCH="amd64"
@@ -30,14 +32,15 @@ if [ ! -x "$(command -v go)" ] ||  [ ! -x "$(command -v upx)" ] ||  [ ! -x "$(co
   exit 1
 fi
 
-if [ ! -z "$V_GOOS" ] || [ ! -z "$V_GOARCH" ]; then
+if [ ! -z "$V_GOOS" ] || [ ! -z "$V_GOARCH" ]; then 
     if [ "$V_GOOS" == "windows" ]; then
         V_FILE='kush.exe'
     fi
     if [[ "$V_GOARCH" =~ ^[32|386]$ ]]; then
         V_ARCH='32'
     fi
-    CGO_ENABLED=0 GOOS=$V_GOOS GOARCH=$V_GOARCH go build -ldflags="-s -w" -o build/$V_GOOS/$V_GOARCH/$V_FILE  && upx --best --lzma build/$V_GOOS/$V_GOARCH/$V_FILE && cd build/$V_GOOS/$V_GOARCH && tar -czf kush_"$V_GOOS"_"$V_ARCH".tar.gz $V_FILE && rm -f $V_FILE && cd -
+    V_GOARCH=${V_GOARCH:-${V_ARCH}}
+    CGO_ENABLED=0 GOOS=$V_GOOS GOARCH=$V_GOARCH go build -ldflags="-s -w" -o build/$V_GOOS/$V_GOARCH/$V_FILE  && cd build/$V_GOOS/$V_GOARCH && tar -czf kush_"$V_GOOS"_"$V_ARCH".tar.gz $V_FILE && rm -f $V_FILE && cd -
 else
     OS="`uname`"
     case $OS in
@@ -53,7 +56,7 @@ else
         exit 1
         ;;
     'Darwin') 
-        CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o build/darwin/amd64/kush && upx --best --lzma build/darwin/amd64/kush && cd build/darwin/amd64 && tar -czf kush_darwin_amd64.tar.gz kush && rm -f kush && cd -
+        #CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o build/darwin/amd64/kush && upx --best --lzma build/darwin/amd64/kush && cd build/darwin/amd64 && tar -czf kush_darwin_amd64.tar.gz kush && rm -f kush && cd -
         ;;
     'SunOS')
         echo "Unsupported OS"
