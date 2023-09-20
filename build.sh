@@ -45,7 +45,7 @@ else
     OS="`uname`"
     case $OS in
     'Linux')
-        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o build/linux/amd64/kush && upx --best --lzma build/linux/amd64/kush && cd build/linux/amd64 && tar -czf kush_linux_amd64.tar.gz kush && rm -f kush && cd -
+        #CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o build/linux/amd64/kush && upx --best --lzma build/linux/amd64/kush && cd build/linux/amd64 && tar -czf kush_linux_amd64.tar.gz kush && rm -f kush && cd -
         ;;
     'FreeBSD')
         echo "Unsupported OS"
