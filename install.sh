@@ -22,7 +22,7 @@ V_GOARCH=$2
 
 
 if [ -z "$V_VERSION" ]; then
-    V_VERSION=`sudo curl https://github.com/anigkus/kush/releases | grep -oiE "<a([^>]+) class=\"Link--primary\">([^<]+)</a>" | awk -F '>' '{print $2}' | awk -F '<' '{print $1}'`
+    V_VERSION=`sudo curl https://github.com/anigkus/kush/releases | grep -oiE "<a([^>]+) class=\"Link--primary Link\">([^<]+)</a>" | awk -F '>' '{print $2}' | awk -F '<' '{print $1}'`
 else
     V_VERSION="v$V_VERSION"
 fi
