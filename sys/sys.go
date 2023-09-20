@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-var VERSION string = "0.0.9"
+var VERSION string = "0.0.1"
 
 var COMMANDS []string = []string{
 	COMMANDS_CREATE,
@@ -28,21 +28,21 @@ var COMMANDS_EXPORT = "export"
 var COMMANDS_IMPORT = "import"
 
 var OPTIONS []string = []string{
-	"-A", "--address",
-	"-P", "--port",
-	"-U", "--username",
-	"-X", "--password",
-	"-K", "--key",
-	"-C", "--comment",
+	"-a", "--address",
+	"-p", "--port",
+	"-u", "--username",
+	"-x", "--password",
+	"-k", "--key",
+	"-c", "--comment",
 	"-f", "--filter",
-	"-Q", "--quiet",
-	"-O", "--output",
-	"-C", "--columns",
-	"-W", "--wide",
-	"-G", "--group",
-	"-S", "--sort",
-	"-V", "--version",
-	"-H", "--help"}
+	"-q", "--quiet",
+	"-o", "--output",
+	"-c", "--columns",
+	"-w", "--wide",
+	"-g", "--group",
+	"-s", "--sort",
+	"-v", "--version",
+	"-h", "--help"}
 
 var KUSH_HOME_PATH = ".kush"
 var KUSH_PATH_JSON = ".kush.json"
@@ -53,8 +53,8 @@ var DEFAULT_OUTPUT string = "json"
 var DEFAULT_GROUP string = "default"
 var DEFAULT_SORT string = "ADDRESS"
 
-var AUTHTYPE_K string = "-K"
-var AUTHTYPE_X string = "-X"
+var AUTHTYPE_K string = "-k"
+var AUTHTYPE_X string = "-x"
 
 var OPTION_COLUMNS []string = []string{"ADDRESS", "USERNAME", "PORT", "AUTHTYPE", "AUTH", "GROUP", "TITLE"}
 var OPTION_FILTERS []string = []string{"ADDRESS", "USERNAME", "PORT", "AUTHTYPE", "GROUP", "TITLE"}
@@ -102,69 +102,115 @@ const (
 )
 
 const (
-	// -A, --address
-	// -P, --port
-	// -U, --username
-	// -X, --password
-	// -K, --key
-	// -T, --title
-	// -F, --filter
-	// -Q, --quiet
-	// -O, --output
-	// -C, --columns
-	// -W, --wide
-	// -G, --group
-	// -S, --sort
-	// -V, --version
-	// -H, --help
-	OPTION_S_ADDRESS  = "-A"
+	// -a, --address
+	// -p, --port
+	// -u, --username
+	// -x, --password
+	// -k, --key
+	// -t, --title
+	// -f, --filter
+	// -q, --quiet
+	// -o, --output
+	// -c, --columns
+	// -w, --wide
+	// -g, --group
+	// -s, --sort
+	// -v, --version
+	// -h, --help
+	OPTION_S_ADDRESS  = "-a"
 	OPTION_L_ADDRESS  = "--address"
-	OPTION_S_PORT     = "-P"
+	OPTION_S_PORT     = "-p"
 	OPTION_L_PORT     = "--port"
-	OPTION_S_USERNAME = "-U"
+	OPTION_S_USERNAME = "-u"
 	OPTION_L_USERNAME = "--username"
-	OPTION_S_PASSWORD = "-X"
+	OPTION_S_PASSWORD = "-x"
 	OPTION_L_PASSWORD = "--password"
-	OPTION_S_KEY      = "-K"
+	OPTION_S_KEY      = "-k"
 	OPTION_L_KEY      = "--key"
-	OPTION_S_TITLE    = "-T"
+	OPTION_S_TITLE    = "-t"
 	OPTION_L_TITLE    = "--title"
-	OPTION_S_FILTER   = "-F"
+	OPTION_S_FILTER   = "-f"
 	OPTION_L_FILTER   = "--filter"
-	OPTION_S_QUIET    = "-Q"
+	OPTION_S_QUIET    = "-q"
 	OPTION_L_QUIET    = "--quiet"
-	OPTION_S_OUTPUT   = "-O"
+	OPTION_S_OUTPUT   = "-o"
 	OPTION_L_OUTPUT   = "--output"
-	OPTION_S_COLUMNS  = "-C"
+	OPTION_S_COLUMNS  = "-c"
 	OPTION_L_COLUMNS  = "--columns"
-	OPTION_S_WIDE     = "-W"
+	OPTION_S_WIDE     = "-w"
 	OPTION_L_WIDE     = "--wide"
-	OPTION_S_GROUP    = "-G"
+	OPTION_S_GROUP    = "-g"
 	OPTION_L_GROUP    = "--group"
-	OPTION_S_SORT     = "-S"
+	OPTION_S_SORT     = "-s"
 	OPTION_L_SORT     = "--sort"
-	OPTION_S_VERSION  = "-V"
+	OPTION_S_VERSION  = "-v"
 	OPTION_L_VERSION  = "--version"
-	OPTION_S_HELP     = "-H"
+	OPTION_S_HELP     = "-h"
 	OPTION_L_HELP     = "--help"
 )
 
-// {"-A", "-P", "-U", "-X", "-K", "-T", "-G", "-Q", "-H"}
-var CREATE_OPTION []string = []string{OPTION_S_ADDRESS, OPTION_S_PORT, OPTION_S_USERNAME, OPTION_S_PASSWORD, OPTION_S_KEY, OPTION_S_TITLE, OPTION_S_GROUP, OPTION_S_QUIET, OPTION_S_HELP}
+// {"-a", "-p", "-u", "-x", "-k", "-t", "-g", "-q", "-h"}
+var CREATE_OPTION []string = []string{
+	OPTION_S_ADDRESS, OPTION_L_ADDRESS,
+	OPTION_S_PORT, OPTION_L_PORT,
+	OPTION_S_USERNAME, OPTION_L_USERNAME,
+	OPTION_S_PASSWORD, OPTION_L_PASSWORD,
+	OPTION_S_KEY, OPTION_L_KEY,
+	OPTION_S_TITLE, OPTION_L_TITLE,
+	OPTION_S_GROUP, OPTION_L_GROUP,
+	OPTION_S_QUIET, OPTION_L_QUIET,
+	OPTION_S_HELP, OPTION_L_HELP}
 
-// {"-A", "-P", "-U", "-T", "-G", "-F", "-Q", "-H"}
-var REMOVE_OPTION []string = []string{OPTION_S_ADDRESS, OPTION_S_PORT, OPTION_S_USERNAME, OPTION_S_TITLE, OPTION_S_GROUP, OPTION_S_FILTER, OPTION_S_QUIET, OPTION_S_HELP}
+// {"-a", "-p", "-u", "-t", "-g", "-f", "-q", "-h"}
+var REMOVE_OPTION []string = []string{
+	OPTION_S_ADDRESS, OPTION_S_ADDRESS,
+	OPTION_S_PORT, OPTION_L_PORT,
+	OPTION_S_USERNAME, OPTION_L_USERNAME,
+	OPTION_S_TITLE, OPTION_L_TITLE,
+	OPTION_S_GROUP, OPTION_L_GROUP,
+	OPTION_S_FILTER, OPTION_L_FILTER,
+	OPTION_S_QUIET, OPTION_L_QUIET,
+	OPTION_S_HELP, OPTION_L_HELP}
 
-// {"-A", "-P", "-U", "-X", "-K", "-T", "-G", "-Q", "-H"}
-var UPDATE_OPTION []string = []string{OPTION_S_ADDRESS, OPTION_S_PORT, OPTION_S_USERNAME, OPTION_S_PASSWORD, OPTION_S_KEY, OPTION_S_TITLE, OPTION_S_GROUP, OPTION_S_QUIET, OPTION_S_HELP}
+// {"-a", "-p", "-u", "-x", "-k", "-t", "-g", "-q", "-h"}
+var UPDATE_OPTION []string = []string{
+	OPTION_S_ADDRESS, OPTION_L_ADDRESS,
+	OPTION_S_PORT, OPTION_L_PORT,
+	OPTION_S_USERNAME, OPTION_L_USERNAME,
+	OPTION_S_PASSWORD, OPTION_L_PASSWORD,
+	OPTION_S_KEY, OPTION_L_KEY,
+	OPTION_S_TITLE, OPTION_L_TITLE,
+	OPTION_S_GROUP, OPTION_L_GROUP,
+	OPTION_S_QUIET, OPTION_L_QUIET,
+	OPTION_S_HELP, OPTION_L_HELP}
 
-// {"-A", "-P", "-U", "-T", "-G", "-F", "-C", "-S", "-H"}
-var SEARCH_OPTION []string = []string{OPTION_S_ADDRESS, OPTION_S_PORT, OPTION_S_USERNAME, OPTION_S_TITLE, OPTION_S_GROUP, OPTION_S_FILTER, OPTION_S_COLUMNS, OPTION_S_SORT, OPTION_S_HELP}
+// {"-a", "-p", "-u", "-t", "-g", "-f", "-c", "-s", "-h"}
+var SEARCH_OPTION []string = []string{
+	OPTION_S_ADDRESS, OPTION_L_ADDRESS,
+	OPTION_S_PORT, OPTION_L_PORT,
+	OPTION_S_USERNAME, OPTION_L_USERNAME,
+	OPTION_S_TITLE, OPTION_L_TITLE,
+	OPTION_S_GROUP, OPTION_L_GROUP,
+	OPTION_S_FILTER, OPTION_L_FILTER,
+	OPTION_S_COLUMNS, OPTION_L_COLUMNS,
+	OPTION_S_SORT, OPTION_L_SORT,
+	OPTION_S_HELP, OPTION_L_HELP}
 
-// {"-A", "-P", "-U", "-T", "-G", "-F", "-C", "-O", "-H"}
-var EXPORT_OPTION []string = []string{OPTION_S_ADDRESS, OPTION_S_PORT, OPTION_S_USERNAME, OPTION_S_TITLE, OPTION_S_GROUP, OPTION_S_FILTER, OPTION_S_COLUMNS, OPTION_S_OUTPUT, OPTION_S_HELP}
+// {"-a", "-p", "-u", "-t", "-g", "-f", "-c", "-o", "-h"}
+var EXPORT_OPTION []string = []string{
+	OPTION_S_ADDRESS, OPTION_L_ADDRESS,
+	OPTION_S_PORT, OPTION_L_PORT,
+	OPTION_S_USERNAME, OPTION_L_USERNAME,
+	OPTION_S_TITLE, OPTION_L_TITLE,
+	OPTION_S_GROUP, OPTION_L_GROUP,
+	OPTION_S_FILTER, OPTION_L_FILTER,
+	OPTION_S_COLUMNS, OPTION_L_COLUMNS,
+	OPTION_S_OUTPUT, OPTION_L_OUTPUT,
+	OPTION_S_HELP, OPTION_L_HELP}
 
-// {"-O", "-H"}
-var IMPORT_OPTION []string = []string{OPTION_S_OUTPUT, OPTION_S_HELP}
+// {"-o", "-h"}
+var IMPORT_OPTION []string = []string{
+	OPTION_S_OUTPUT, OPTION_L_OUTPUT,
+	OPTION_S_HELP, OPTION_L_HELP}
 
 var PERM_FILE_MODE fs.FileMode = 0777

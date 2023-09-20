@@ -5,10 +5,10 @@
 package util
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"os/user"
@@ -23,7 +23,7 @@ import (
 	"github.com/anigkus/kush/sys"
 )
 
-//InArray check if an element is in an array
+// InArray check if an element is in an array
 func InArray(target string, arrays []string) bool {
 	for _, element := range arrays {
 		if target == element {
@@ -58,7 +58,7 @@ func DirectArrayToMap(elements []string) (map[string]string, error) {
 	if len(elements) > 5 || len(elements) < 3 {
 		return nil, fmt.Errorf("%s%s", "error: ", "arguments length illegal")
 	}
-	//-X -K -P
+	//-x -k -p
 	// required contains `@`
 	if !CheckArrayContainsSubstr(elements, sys.AT) {
 		return nil, fmt.Errorf("%s%s", "error: ", "arguments format illegal")
@@ -241,10 +241,6 @@ func GetDataPathRootHome() (string, error) {
 		}
 		datapathroothome = value
 	}
-	// var user, err = CurrentUser()
-	// if err != nil {
-	// 	return datapathroothome, errors.New("error: get current user exception")
-	// }
 	var fileinfo, erros = os.Stat(datapathroothome)
 	if errors.Is(erros, os.ErrNotExist) {
 		return datapathroothome, errors.New("error: \"" + datapathroothome + "\" data no such file or directory")
@@ -271,24 +267,20 @@ func CreateDataPathJsonFile(addhosts ...cli.Host) error {
 	if len(addhosts) <= 0 {
 		return fmt.Errorf("%s%s", "error: ", "append data empty for .kush.json ")
 	}
-	var jsonfilepath, err = GetKushJson()
+	var kushjson, err = GetKushJson()
 	if err != nil {
 		return err
 	}
-	// if err := syscall.Access(jsonfilepath, syscall.O_RDWR); err != nil {
-	// 	return fmt.Errorf("%s%s%s", "error: ", jsonfilepath, " no read and write permissions")
-	// }
-
-	var _, errpath = os.Stat(jsonfilepath)
+	var _, errpath = os.Stat(kushjson)
 	if errors.Is(errpath, os.ErrNotExist) {
-		_, err := os.Create(jsonfilepath)
+		_, err := os.Create(kushjson)
 		if err != nil {
 			return fmt.Errorf("%s%s%s", "error: ", sys.KUSH_PATH_JSON, " create fail")
 		}
 	}
 
 	// read
-	bytehosts, err := os.ReadFile(jsonfilepath)
+	bytehosts, err := ReadFileToBytes(kushjson)
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "read .kush.json exception")
 	}
@@ -319,7 +311,7 @@ func CreateDataPathJsonFile(addhosts ...cli.Host) error {
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "MarshalIndent .kush.json exception")
 	}
-	err = ioutil.WriteFile(jsonfilepath, data, sys.PERM_FILE_MODE)
+	err = WriteFileToBytes(kushjson, data)
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "write .kush.json exception")
 	}
@@ -335,11 +327,11 @@ func RemoveDataPathJsonFile(delhosts ...cli.Host) error {
 	if err != nil {
 		return err
 	}
-	bytes, err := ReadFileToBytes(kushjson)
+	bytehosts, err := ReadFileToBytes(kushjson)
 	if err != nil {
 		return err
 	}
-	diskhosts, err := ByteToHosts(bytes)
+	diskhosts, err := ByteToHosts(bytehosts)
 	if err != nil {
 		return err
 	}
@@ -357,7 +349,7 @@ func RemoveDataPathJsonFile(delhosts ...cli.Host) error {
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "MarshalIndent .kush.json exception")
 	}
-	err = ioutil.WriteFile(kushjson, data, sys.PERM_FILE_MODE)
+	err = WriteFileToBytes(kushjson, data)
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "write .kush.json exception")
 	}
@@ -375,7 +367,7 @@ func UpdateDataPathJsonFile(updatehosts []cli.Host) error {
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "MarshalIndent .kush.json exception")
 	}
-	err = ioutil.WriteFile(kushjson, data, sys.PERM_FILE_MODE)
+	err = WriteFileToBytes(kushjson, data)
 	if err != nil {
 		return fmt.Errorf("%s%s", "error: ", "write .kush.json exception")
 	}
@@ -391,7 +383,6 @@ func ExportDataPathFile(output string, outhosts ...map[string]string) error {
 			if err != nil {
 				return fmt.Errorf("%s%s", "error: ", "MarshalIndent outhosts exception")
 			}
-			//todo
 			ExitPrintln(string(bytes))
 		}
 	}
@@ -474,7 +465,7 @@ func HostEquals(source cli.Host, target cli.Host) bool {
 func ArgFilterToMap(argfilter string) (map[string]string, error) {
 	var filtermap map[string]string = map[string]string{}
 	if len(argfilter) > 0 {
-		// -F 'ADDRESS = 1.1.1.1 && USERNAME = user || GROUP = user'
+		// -f 'ADDRESS = 1.1.1.1 && USERNAME = user || GROUP = user'
 		if strings.Contains(argfilter, sys.LOGICAL_OPERATORS_AND) && strings.Contains(argfilter, sys.LOGICAL_OPERATORS_OR) {
 			return nil, fmt.Errorf("%s%s", "error: ", "logical operators && and || can only use one")
 		}
@@ -619,7 +610,7 @@ func HostMapsFilter(filtermap map[string]string, diskhosts []cli.Host) ([]map[st
 					}
 					structfield, _ := vtype.FieldByName(upperletter)
 					hostValue := fmt.Sprint(valueof.FieldByName(structfield.Name).Interface())
-					//-F 'ADDRESS = 1.1.1.1 && USERNAME = test'
+					//-f 'ADDRESS = 1.1.1.1 && USERNAME = test'
 					// &&
 					if operators == sys.LOGICAL_OPERATORS_AND && hostValue == value {
 						matchsize--
@@ -666,7 +657,7 @@ func HostMapsSort(searchhostmaps []map[string]string, sortfield string) ([]map[s
 	return searchhostmaps, nil
 }
 
-//HostMapsReturnColumns search collections show required columns
+// HostMapsReturnColumns search collections show required columns
 func HostMapsReturnColumns(searchhostmaps []map[string]string, columns ...string) ([]map[string]string, error) {
 	var searchhostsmapscolumns []map[string]string = []map[string]string{}
 	// columns
@@ -714,24 +705,29 @@ func ReadFileToBytes(file string) ([]byte, error) {
 	if !fileinfo.Mode().IsRegular() {
 		return nil, errors.New("error: \"" + file + "\" not regular")
 	}
-	// var user, erruser = CurrentUser()
-	// if erruser != nil {
-	// 	return nil, errors.New("error: get current user exception")
-	// }
-	// if err := syscall.Access(file, syscall.O_RDONLY); err != nil {
-	// 	return nil, errors.New("error: " + user + " has no read permissions on the \"" + file + "\" ")
-	// }
 	bytes, err := os.ReadFile(file)
 	if err != nil {
 		return nil, errors.New("error: read file key error")
 	}
-	return bytes, nil
+	//decode
+	sDec, err := base64.StdEncoding.DecodeString(string(bytes))
+	if err != nil {
+		return nil, errors.New("error: decode file error")
+	}
+	return sDec, nil
+}
+
+// WriteFileToBytes bytes to file
+func WriteFileToBytes(file string, data []byte) error {
+	//encode
+	sEnc := base64.StdEncoding.EncodeToString([]byte(data))
+	return os.WriteFile(file, []byte(sEnc), sys.PERM_FILE_MODE)
 }
 
 // MapValueToString the map value is converted into a string and join using sep
 //
 // map[string]string
-//{
+// {
 // "key1":"value1",
 // "key2":"value2"
 // }
@@ -790,7 +786,7 @@ func CheckPortRange(port string) (int32, error) {
 	return int32(int64port), nil
 }
 
-//CheckPublicKey validata ssh publicKey
+// CheckPublicKey validata ssh publicKey
 func CheckPublicKey(key string) (string, error) {
 	var err = ManyIsEmpty(key)
 	if err != nil {
@@ -803,13 +799,6 @@ func CheckPublicKey(key string) (string, error) {
 	if !fileinfo.Mode().IsRegular() {
 		return "", errors.New("error: \"" + key + "\" not regular")
 	}
-	// var user, erruser = CurrentUser()
-	// if erruser != nil {
-	// 	return "", errors.New("error: get current user exception")
-	// }
-	// if err := syscall.Access(key, syscall.O_RDONLY); err != nil {
-	// 	return "", errors.New("error: " + user + " has no read permissions on the \"" + key + "\" ")
-	// }
 	return key, nil
 }
 
@@ -835,10 +824,10 @@ func SearchHostToTerminal(searchhostmap map[string]string) (*cli.Terminal, error
 	var password, okPassword = searchhostmap[sys.HOST_PASSWORD]
 	var key, okKey = searchhostmap[sys.HOST_KEY]
 	if !okPassword && !okKey {
-		return nil, errors.New("error: required choose one( -X | -K )")
+		return nil, errors.New("error: required choose one( -x | -k )")
 	}
 	if len(strings.Trim(password, " ")) > 0 && len(strings.Trim(key, " ")) > 0 {
-		return nil, errors.New("error: can only choose one( -X | -K )")
+		return nil, errors.New("error: can only choose one( -x | -k )")
 	}
 	var auth = ""
 	if okPassword && len(strings.Trim(password, " ")) > 0 {
@@ -863,7 +852,7 @@ func SearchHostToTerminal(searchhostmap map[string]string) (*cli.Terminal, error
 	case sys.AUTHTYPE_K:
 		terminal = cli.New(address, username, "", auth, iport)
 	default:
-		return nil, fmt.Errorf("%s%s", "error: ", "required choose one( -X | -K )")
+		return nil, fmt.Errorf("%s%s", "error: ", "required choose one( -x | -k )")
 	}
 	return terminal, nil
 }
@@ -988,4 +977,8 @@ func Clear() {
 	default:
 		Cmd("clear")
 	}
+}
+
+func PasswordWarning() {
+	fmt.Printf("kush: [Warning] Using a password on the command line interface can be insecure.\n")
 }

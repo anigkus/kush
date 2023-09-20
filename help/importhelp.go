@@ -46,7 +46,7 @@ func ImportHelpRun(importArgs []string) {
 
 // ImportHelpOptionValidate check terminal option arguments
 //
-// Option: "-O"
+// Option: "-o"
 func ImportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, error) {
 	var keyError []string
 	for key := range argOptionsMap {
@@ -62,7 +62,7 @@ func ImportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 	if err != nil {
 		return entity.Option{}, err
 	}
-	// -O
+	// -o
 	var mOutput, okOutput = optionMaps[sys.OPTION_S_OUTPUT]
 	if okOutput {
 		var _, err = entity.GetOptionMapsByOutput(mOutput)
@@ -75,7 +75,7 @@ func ImportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 
 // ImportHelpOptionMapsToOption convert terminal option arguments to option struct
 //
-// Assembly parameters: "-O"
+// Assembly parameters: "-o"
 func ImportHelpOptionMapsToOption(optionMaps map[string]string) (entity.Option, error) {
 	var option = entity.Option{}
 	var mOutput, okOutput = optionMaps[sys.OPTION_S_OUTPUT]
@@ -94,7 +94,7 @@ func ImportHelpUsagePrintText() string {
 // ImportHelpUsage print Import command help usage
 func ImportHelpUsage() {
 	var printText = `kush import -o json > /tmp/kush.json
-kush import -o json -C 'ADDRESS,USERNAME' > ~/.kush/kush.json
+kush import -o json -c 'ADDRESS,USERNAME' > ~/.kush/kush.json
 ` + ImportHelpUsagePrintText()
 	util.ExitPrintln(printText)
 }

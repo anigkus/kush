@@ -17,7 +17,7 @@ curl -sS https://raw.githubusercontent.com/anigkus/kush/main/install.sh | bash
 OR
 
 ```
-curl -sS https://raw.githubusercontent.com/anigkus/kush/main/install.sh | bash -s -- 0.0.9
+curl -sS https://raw.githubusercontent.com/anigkus/kush/main/install.sh | bash -s -- 0.0.1
 ```
 
 # Command Help
@@ -34,23 +34,28 @@ COMMAND:
   import    Import the kush for file
  
 OPTIONS:
-  -A, --address         [required] Address 
-  -P, --port            [optional] Port, DEFAULT:22
-  -U, --username        [optional] Username, DEFAULT:`whoami`}
-  -X, --password        [required] Password, Can only choose one( -X | -K )
-  -K, --key             [required] Key, Can only choose one( -X | -K )
-  -T, --title           [optional] Title
-  -F, --filter          [optional] Filter( ADDRESS , USERNAME , PORT , AUTHTYPE , GROUP , TITLE )
-  -Q, --quiet           [optional] Quiet
-  -O, --output          [optional] Output, DEFAULT:json
-  -C, --columns         [optional] columns( ADDRESS , USERNAME , PORT ,AUTHTYPE , AUTH , GROUP , TITLE )
-  -W, --wide            [optional] Wide
-  -G, --group           [optional] Group, DEFAULT:default
-  -S, --sort            [optional] Sort[ASC]( ADDRESS , USERNAME , PORT , AUTHTYPE , GROUP ), DEFAULT:ADDRESS
-  -V, --version         version
-  -H, --help            help
+  -a, --address         [required] Address 
+  -p, --port            [optional] Port, DEFAULT:22
+  -u, --username        [optional] Username, DEFAULT:`whoami`
+  -x, --password        [required] Password, Can only choose one( -x | -k )
+  -k, --key             [required] Key, Can only choose one( -x | -k )
+  -t, --title           [optional] Title
+  -f, --filter          [optional] Filter( ADDRESS , USERNAME , PORT , AUTHTYPE , GROUP , TITLE )
+  -q, --quiet           [optional] Quiet
+  -o, --output          [optional] Output, DEFAULT:json
+  -c, --columns         [optional] columns( ADDRESS , USERNAME , PORT ,AUTHTYPE , AUTH , GROUP , TITLE )
+  -w, --wide            [optional] Wide
+  -g, --group           [optional] Group, DEFAULT:default
+  -s, --sort            [optional] Sort[ASC]( ADDRESS , USERNAME , PORT , AUTHTYPE , GROUP ), DEFAULT:ADDRESS
+  -v, --version         version
+  -h, --help            help
 
 Run 'kush COMMAND --help' for more information on a command.
+
+Direct Connection:
+
+kush user@host -x 123456
+kush user@host -k ~/.ssh/id_rsa_github.pub
 
 To get more help with kush, check out our guides at https://github.com/anigkus/kush
 ```
@@ -60,31 +65,31 @@ To get more help with kush, check out our guides at https://github.com/anigkus/k
 ## --filter
 
 ```
--F 'ADDRESS = 1.1.1.1'
--F 'USERNAME = user'
--F 'PORT = 1'
--F 'AUTHTYPE = [ -X | -K ]'
--F 'GROUP = group'
--F 'TITLE = test'
--F 'ADDRESS = 1.1.1.1 && USERNAME = user'
--F 'ADDRESS = 1.1.1.1 || USERNAME = user'
+-f 'ADDRESS = 1.1.1.1'
+-f 'USERNAME = user'
+-f 'PORT = 1'
+-f 'AUTHTYPE = [ -x | -k ]'
+-f 'GROUP = group'
+-f 'TITLE = test'
+-f 'ADDRESS = 1.1.1.1 && USERNAME = user'
+-f 'ADDRESS = 1.1.1.1 || USERNAME = user'
 
 ```
 
 ## --columns 
 
 ```
--C 'ADDRESS , USERNAME , PORT ,AUTHTYPE , AUTH , GROUP , TITLE'
+-c 'ADDRESS , USERNAME , PORT ,AUTHTYPE , AUTH , GROUP , TITLE'
 ```
 
 ## --sort 
 
 ```
--S ADDRESS 
-—S USERNAME 
-—S PORT 
-—S AUTHTYPE 
-—S GROUP
+-s ADDRESS 
+—s USERNAME 
+—s PORT 
+—s AUTHTYPE 
+—s GROUP
 ```
 
 # Data Path
@@ -122,8 +127,8 @@ export PATH=$KUSH_HOME/bin:$PATH
 
 | ADDRESS | USERNAME | PORT | AUTHTYPE | AUTH | GROUP | TITLE |
 | :--- | :---  | :---  | :--- | :--- | :---  | :---  |
-| 192.168.1.1 | root | 22 | -X | 123456 | group1 | xxx1  |
-| 192.168.1.2 | root | 22 | -K | ~/id_rsa.pub | group3  | xxx1  |
+| 192.168.1.1 | root | 22 | -x | 123456 | group1 | xxx1  |
+| 192.168.1.2 | root | 22 | -k | ~/id_rsa.pub | group3  | xxx1  |
 
 ```
 > 1.2
@@ -132,7 +137,7 @@ export PATH=$KUSH_HOME/bin:$PATH
 # Direct Connection
 
 ```
-kush root@192.168.1.10 -X 123456
+kush root@192.168.1.10 -x 123456
 ```
 
 # Create Host
@@ -148,55 +153,55 @@ kush create [OPTIONS]
 ### add a password-based host, interactive mode
 
 ```
-kush create -A 192.168.1.1 -X 123456
+kush create -a 192.168.1.1 -x 123456
 ```
 
 ### add a password-based host, non-interactive mode
 
 ```
-kush create -A 192.168.1.1 -X 123456 -Q
+kush create -a 192.168.1.1 -x 123456 -q
 ```
 
 ### add a identity-based host, interactive mode
 
 ```
-kush create -A 192.168.1.1 -K ~/.ssh/id_rsa_github.pub
+kush create -a 192.168.1.1 -k ~/.ssh/id_rsa_github.pub
 ```
 
 ### add a password-based and group name use: default, interactive mode
 
 ```
-kush create -A 192.168.1.1 -U root -P 22 -X 123456
+kush create -a 192.168.1.1 -u root -p 22 -x 123456
 ```
 
 ### add a password-based and group name use: default and title name use: default, interactive mode
 
 ```
-kush create -A 192.168.1.1 -U root -P 22 -X 123456 -T test
+kush create -a 192.168.1.1 -u root -p 22 -x 123456 -t test
 ```
 
 ### add a identity-based and group name use: default and title name use: test, interactive mode
 
 ```
-kush create -A 192.168.1.1 -U root -P 22 -K ~/.ssh/id_rsa_github.pub -T test
+kush create -a 192.168.1.1 -u root -p 22 -k ~/.ssh/id_rsa_github.pub -t test
 ```
 
 ### add a password-based and group name use: default and title name use: test, interactive mode
 
 ```
-kush create -A 192.168.1.1 -U root -P 22 -X 123456 -T test
+kush create -a 192.168.1.1 -u root -p 22 -x 123456 -t test
 ```
 
 ### add a identity-based and group name use: default and title name use: test, interactive mode
 
 ```
-kush create -A 192.168.1.1 -U root -P 22 -K ~/.ssh/id_rsa_github.pub -T test
+kush create -a 192.168.1.1 -u root -p 22 -k ~/.ssh/id_rsa_github.pub -t test
 ```
 
 ### add a password-based and group name use: Group1 and title name use: test, interactive mode
 
 ```
-kush create -A 192.168.1.1 -U root -P 22 -X 123456 -T test -G Group1
+kush create -a 192.168.1.1 -u root -p 22 -x 123456 -t test -g Group1
 ```
 
 # Remove Host
@@ -211,25 +216,25 @@ kush remove [OPTIONS]
 ### `remove` according to the combination of address、username、port, interactive mode
 
 ```
-kush remove -A 192.168.1.1 -U root -P 22 
+kush remove -a 192.168.1.1 -u root -p 22 
 ```
 
 ### `remove` according to the combination of address、username、port, non-interactive mode
 
 ```
-kush remove -A 192.168.1.1 -U root -P 22 -Q
+kush remove -a 192.168.1.1 -u root -p 22 -q
 ```
 
 ### `remove` by [ address ] condition, non-interactive mode
 
 ```
-kush remove -A 192.168.1.1 -Q
+kush remove -a 192.168.1.1 -q
 ```
 
 ### `remove` according to the combination of [address] and filter conditions (GROUP=group1), non-interactive mode
 
 ```
-kush remove -A 192.168.1.1 -F 'GROUP=group1' -Q
+kush remove -a 192.168.1.1 -f 'GROUP=group1' -q
 ```
 
 # Update Host
@@ -244,31 +249,31 @@ kush update [OPTIONS]
 ### `update` password according to `address`, interactive mode
 
 ```
-kush update -A 192.168.1.1 -X 123456
+kush update -a 192.168.1.1 -x 123456
 ```
 
 ### `update` identity key according to `address`, interactive mode
 
 ```
-kush update -A 192.168.1.1 -K ~/.ssh/id_rsa_github.pub
+kush update -a 192.168.1.1 -k ~/.ssh/id_rsa_github.pub
 ```
 
 ### `update` title according to `address`, interactive mode
 
 ```
-kush update -A 192.168.1.1 -T xxx
+kush update -a 192.168.1.1 -t xxx
 ```
 
 ### `update` username, port according to `address`, interactive mode
 
 ```
-kush update -A 192.168.1.1 -U root -P 22
+kush update -a 192.168.1.1 -u root -p 22
 ```
 
 ### `update` username, port, group name according to `address`, interactive mode
 
 ```
-kush update -A 192.168.1.1 -U root -P 22 -G Group1
+kush update -a 192.168.1.1 -u root -p 22 -g Group1
 ```
 
 # Search Host
@@ -284,13 +289,13 @@ kush search [OPTIONS]
 ### `search` data according to `address`
 
 ```
-kush search -A 192.168.1.1
+kush search -a 192.168.1.1
 ```
 
 ### `search` data according to `address` condition and add filter condition (GROUP=group1), and sort and display according to address
 
 ```
-kush search -A test.host1.com -F 'GROUP=group1' -S ADDRESS
+kush search -a test.host1.com -f 'GROUP=group1' -s ADDRESS
 ```
 
 # Export Host
@@ -312,13 +317,13 @@ kush export -o json > /tmp/kush.json
 ### `export` json format, specify(GROUP=group1)
 
 ```
-kush export -o json -F 'GROUP=group1' > /tmp/kush.json
+kush export -o json -f 'GROUP=group1' > /tmp/kush.json
 ```
 
 ### `export` json format, specify column
 
 ```
-kush export -o json -C 'ADDRESS,USERNAME' > ~/.kush/kush.json
+kush export -o json -c 'ADDRESS,USERNAME' > ~/.kush/kush.json
 ```
 
 # Import Host
@@ -340,11 +345,11 @@ kush import -o json < ~/.kush/kush.json
 # Version
 
 ```
-kush [ -V ｜ --version ]
+kush [ -v ｜ --version ]
 ```
 
 # Help
 
 ```
-kush | kush -H | kush --help
+kush | kush -h | kush --help
 ```

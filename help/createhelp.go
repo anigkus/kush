@@ -12,6 +12,7 @@ import (
 	"github.com/anigkus/kush/entity"
 	"github.com/anigkus/kush/sys"
 	"github.com/anigkus/kush/util"
+	"golang.org/x/term"
 )
 
 // CreateHelpOptionValidate
@@ -48,9 +49,9 @@ func CreateHelpRun(createArgs []string) {
 
 // CreateHelpOptionValidate check terminal option arguments
 //
-// Required: "-A" , "[-X|-K]
+// Required: "-a" , "[-x|-k]
 //
-// Option: "-P", "-U",  "-T", "-G", "-Q"
+// Option: "-p", "-u",  "-t", "-g", "-q"
 func CreateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, error) {
 	var keyError []string
 	for key := range argOptionsMap {
@@ -67,20 +68,34 @@ func CreateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 		return entity.Option{}, err
 	}
 
-	//-A
+	//-a
 	if _, err = entity.GetOptionMapsByAddress(optionMaps[sys.OPTION_S_ADDRESS]); err != nil {
 		return entity.Option{}, err
 	}
 
-	//[-X | -K]
+	//[-x | -k]
 	var mPassword, okPassword = optionMaps[sys.OPTION_S_PASSWORD]
 	var mKey, okKey = optionMaps[sys.OPTION_S_KEY]
-	if !okPassword && !okKey {
-		return entity.Option{}, errors.New("error: required choose one( -X | -K )")
-	}
 	if okPassword && okKey {
-		return entity.Option{}, errors.New("error: can only choose one( -X | -K )")
+		return entity.Option{}, errors.New("error: can only choose one( -x | -k )")
 	}
+	if !okPassword && !okKey {
+		return entity.Option{}, errors.New("error: required choose one( -x | -k )")
+	}
+	if okPassword && mPassword != "" {
+		util.PasswordWarning()
+	}
+	if okPassword && mPassword == "" && !okKey {
+		fmt.Print("🔑: ")
+		password, err := term.ReadPassword(0)
+		if err != nil {
+			return entity.Option{}, errors.New("error: password exception")
+		}
+		optionMaps[sys.OPTION_S_PASSWORD] = string(password)
+		mPassword, okPassword = optionMaps[sys.OPTION_S_PASSWORD]
+		fmt.Println()
+	}
+
 	if okPassword {
 		if _, err = entity.GetOptionMapsByPassword(mPassword); err != nil {
 			return entity.Option{}, err
@@ -92,14 +107,14 @@ func CreateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 		}
 	}
 
-	//-P
+	//-p
 	var mPort, okPort = optionMaps[sys.OPTION_S_PORT]
 	if okPort {
 		if _, err = entity.GetOptionMapsByPort(mPort); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-U
+	//-u
 	var mUsername, okUsername = optionMaps[sys.OPTION_S_USERNAME]
 	if okUsername {
 		if _, err = entity.GetOptionMapsByUsername(mUsername); err != nil {
@@ -110,14 +125,14 @@ func CreateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 			return entity.Option{}, errors.New("error: get current user exception")
 		}
 	}
-	//-T
+	//-t
 	var mTitle, okTitle = optionMaps[sys.OPTION_S_TITLE]
 	if okTitle {
 		if _, err = entity.GetOptionMapsByTitle(mTitle); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-G
+	//-g
 	var mGroup, okGroup = optionMaps[sys.OPTION_S_GROUP]
 	if okGroup {
 		if _, err = entity.GetOptionMapsByGroup(mGroup); err != nil {
@@ -130,7 +145,7 @@ func CreateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 
 // CreateHelpOptionMapsToOption convert terminal option arguments to option struct
 //
-// Assembly parameters: -A", "-P", "-U", "-X", "-K", "-T", "-G", "-Q"
+// Assembly parameters: -a", "-p", "-u", "-x", "-k", "-t", "-g", "-q"
 func CreateHelpOptionMapsToOption(optionMaps map[string]string) (entity.Option, error) {
 	var option = entity.Option{}
 	option.SetAddress(optionMaps[sys.OPTION_S_ADDRESS])
@@ -185,9 +200,9 @@ func CreateHelpUsagePrintText() string {
 
 // CreateHelpUsage print create command help usage
 func CreateHelpUsage() {
-	var printText = `kush create -A 192.168.1.1 -X 123456 
-kush create -A 192.168.1.1 -X 123456 -Q
-kush create -A 192.168.1.1 -K ~/.ssh/id_rsa_github.pub
+	var printText = `kush create -a 192.168.1.1 -x 123456 
+kush create -a 192.168.1.1 -x 123456 -q
+kush create -a 192.168.1.1 -k ~/.ssh/id_rsa_github.pub
 ` + CreateHelpUsagePrintText()
 	util.ExitPrintln(printText)
 }

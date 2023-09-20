@@ -48,13 +48,13 @@ func UpdateHelpRun(updateArgs []string) {
 
 // UpdateHelpOptionValidate check terminal option arguments
 //
-// Required: "-A"
+// Required: "-a"
 //
-// Option:  "-P", "-U", "-X", "-K", "-T", "-G"
+// Option:  "-p", "-u", "-x", "-k", "-t", "-g"
 func UpdateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, error) {
 	var keyError []string
 	for key := range argOptionsMap {
-		if !util.InArray(key, sys.CREATE_OPTION) {
+		if !util.InArray(key, sys.UPDATE_OPTION) {
 			keyError = append(keyError, key)
 		}
 	}
@@ -67,25 +67,25 @@ func UpdateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 		return entity.Option{}, err
 	}
 
-	//-A
+	//-a
 	if _, err = entity.GetOptionMapsByAddress(optionMaps[sys.OPTION_S_ADDRESS]); err != nil {
 		return entity.Option{}, err
 	}
-	//-P
+	//-p
 	var mPort, okPort = optionMaps[sys.OPTION_S_PORT]
 	if okPort {
 		if _, err = entity.GetOptionMapsByPort(mPort); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-U
+	//-u
 	var mUsername, okUsername = optionMaps[sys.OPTION_S_USERNAME]
 	if okUsername {
 		if _, err = entity.GetOptionMapsByUsername(mUsername); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//[-X | -K]
+	//[-x | -k]
 	var mPassword, okPassword = optionMaps[sys.OPTION_S_PASSWORD]
 	var mKey, okKey = optionMaps[sys.OPTION_S_KEY]
 	if okPassword {
@@ -98,14 +98,14 @@ func UpdateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 			return entity.Option{}, err
 		}
 	}
-	//-T
+	//-t
 	var mTitle, okTitle = optionMaps[sys.OPTION_S_TITLE]
 	if okTitle {
 		if _, err = entity.GetOptionMapsByTitle(mTitle); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-G
+	//-g
 	var mGroup, okGroup = optionMaps[sys.OPTION_S_GROUP]
 	if okGroup {
 		if _, err = entity.GetOptionMapsByGroup(mGroup); err != nil {
@@ -118,7 +118,7 @@ func UpdateHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 
 // UpdateHelpOptionMapsToOption convert terminal option arguments to option struct
 //
-// Assembly parameters: "-A", "-P", "-U", "-X", "-K", "-T", "-G"
+// Assembly parameters: "-a", "-p", "-u", "-x", "-k", "-t", "-g"
 func UpdateHelpOptionMapsToOption(optionMaps map[string]string) (entity.Option, error) {
 	var option = entity.Option{}
 	option.SetAddress(optionMaps[sys.OPTION_S_ADDRESS])
@@ -166,9 +166,9 @@ func UpdateHelpUsagePrintText() string {
 
 // UpdateHelpUsage print update command help usage
 func UpdateHelpUsage() {
-	var printText = `kush update -A 192.168.1.1 -X 123456 
-kush update -A 192.168.1.1 -X 123456 -Q
-kush update -A 192.168.1.1 -K ~/.ssh/id_rsa_github.pub
+	var printText = `kush update -a 192.168.1.1 -x 123456 
+kush update -a 192.168.1.1 -x 123456 -q
+kush update -a 192.168.1.1 -k ~/.ssh/id_rsa_github.pub
 ` + UpdateHelpUsagePrintText()
 	util.ExitPrintln(printText)
 }

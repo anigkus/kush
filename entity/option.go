@@ -30,7 +30,7 @@ type Option struct {
 	Sort     string
 }
 
-//no parameter constructor: public and instanced function
+// no parameter constructor: public and instanced function
 func OptionDefault() *Option {
 	return &Option{
 		Output: sys.DEFAULT_OUTPUT,
@@ -72,7 +72,7 @@ func OptionInstance(
 
 }
 
-//String struct to string
+// String struct to string
 func (option Option) String() string {
 	valueof := reflect.ValueOf(option)
 	vtype := valueof.Type()
@@ -85,7 +85,7 @@ func (option Option) String() string {
 	return strings.Join(elements, "")
 }
 
-//get and set
+// get and set
 func (option *Option) GetAddress() string {
 	return option.Address
 }
@@ -179,112 +179,191 @@ func (option *Option) SetSort(sort string) {
 
 // ParseArgOptions convert terminal option arguments to map[string]string
 //
-// If both -A and --address exist, -A is Prefered.
+// If both -a and --address exist, -a is Prefered.
 func ParseArgOptions(argOptionsMap map[string]string) (map[string]string, error) {
 	if argOptionsMap == nil || len(argOptionsMap) <= 0 {
 		return nil, errors.New("error: args empty")
 	}
 	var optionMaps map[string]string = map[string]string{}
-	//Preferred:-A
-	var argAddressShortHand, argAddressOption = argOptionsMap[sys.OPTION_S_ADDRESS], argOptionsMap[sys.OPTION_L_ADDRESS]
-	if err := util.ManyIsEmpty(argAddressShortHand); err == nil {
+	//Preferred:-a
+	var argAddressShortHand, okAddressShortHand = argOptionsMap[sys.OPTION_S_ADDRESS]
+	var argAddressOption, okAddressOption = argOptionsMap[sys.OPTION_L_ADDRESS]
+	if okAddressShortHand {
 		optionMaps[sys.OPTION_S_ADDRESS] = strings.Trim(argAddressShortHand, " ")
-	} else if err := util.ManyIsEmpty(argAddressOption); err == nil {
+	}
+	if okAddressOption {
 		optionMaps[sys.OPTION_S_ADDRESS] = argAddressOption
 	}
-	//Preferred:-P
-	var argPortShortHand, argPortOption = argOptionsMap[sys.OPTION_S_PORT], argOptionsMap[sys.OPTION_L_PORT]
-	if err := util.ManyIsEmpty(argPortShortHand); err == nil {
+	// if err := util.ManyIsEmpty(argAddressShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_ADDRESS] = strings.Trim(argAddressShortHand, " ")
+	// } else if err := util.ManyIsEmpty(argAddressOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_ADDRESS] = argAddressOption
+	// }
+
+	//Preferred:-p
+	var argPortShortHand, okPortShortHand = argOptionsMap[sys.OPTION_S_PORT]
+	var argPortOption, okPortOption = argOptionsMap[sys.OPTION_L_PORT]
+	if okPortShortHand {
 		optionMaps[sys.OPTION_S_PORT] = argPortShortHand
-	} else if err := util.ManyIsEmpty(argPortOption); err == nil {
+	}
+	if okPortOption {
 		optionMaps[sys.OPTION_S_PORT] = argPortOption
 	}
+	// if err := util.ManyIsEmpty(argPortShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_PORT] = argPortShortHand
+	// } else if err := util.ManyIsEmpty(argPortOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_PORT] = argPortOption
+	// }
 
-	//Preferred:-U
-	var argUsernameShortHand, argUsernameOption = argOptionsMap[sys.OPTION_S_USERNAME], argOptionsMap[sys.OPTION_L_USERNAME]
-	if err := util.ManyIsEmpty(argUsernameShortHand); err == nil {
+	//Preferred:-u
+	var argUsernameShortHand, okUsernameShortHand = argOptionsMap[sys.OPTION_S_USERNAME]
+	var argUsernameOption, okUsernameOption = argOptionsMap[sys.OPTION_L_USERNAME]
+	if okUsernameShortHand {
 		optionMaps[sys.OPTION_S_USERNAME] = argUsernameShortHand
-	} else if err := util.ManyIsEmpty(argUsernameOption); err == nil {
+	}
+	if okUsernameOption {
 		optionMaps[sys.OPTION_S_USERNAME] = argUsernameOption
 	}
-	//Preferred:-X
-	var argPasswordShortHand, argPasswordOption = argOptionsMap[sys.OPTION_S_PASSWORD], argOptionsMap[sys.OPTION_L_PASSWORD]
-	if err := util.ManyIsEmpty(argPasswordShortHand); err == nil {
+	// if err := util.ManyIsEmpty(argUsernameShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_USERNAME] = argUsernameShortHand
+	// } else if err := util.ManyIsEmpty(argUsernameOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_USERNAME] = argUsernameOption
+	// }
+	//Preferred:-x
+	var argPasswordShortHand, okPasswordShortHand = argOptionsMap[sys.OPTION_S_PASSWORD]
+	var argPasswordOption, okPasswordOption = argOptionsMap[sys.OPTION_L_PASSWORD]
+	if okPasswordShortHand {
 		optionMaps[sys.OPTION_S_PASSWORD] = argPasswordShortHand
-	} else if err := util.ManyIsEmpty(argPasswordOption); err == nil {
+	}
+	if okPasswordOption {
 		optionMaps[sys.OPTION_S_PASSWORD] = argPasswordOption
 	}
+	// if err := util.ManyIsEmpty(argPasswordShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_PASSWORD] = argPasswordShortHand
+	// } else if err := util.ManyIsEmpty(argPasswordOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_PASSWORD] = argPasswordOption
+	// }
 
-	//Preferred:-K
-	var argKeyShortHand, argKeyOption = argOptionsMap[sys.OPTION_S_KEY], argOptionsMap[sys.OPTION_L_KEY]
-	if err := util.ManyIsEmpty(argKeyShortHand); err == nil {
+	//Preferred:-k
+	var argKeyShortHand, okKeyShortHand = argOptionsMap[sys.OPTION_S_KEY]
+	var argKeyOption, okKeyOption = argOptionsMap[sys.OPTION_L_KEY]
+	if okKeyShortHand {
 		optionMaps[sys.OPTION_S_KEY] = argKeyShortHand
-	} else if err := util.ManyIsEmpty(argKeyOption); err == nil {
+	}
+	if okKeyOption {
 		optionMaps[sys.OPTION_S_KEY] = argKeyOption
 	}
+	// if err := util.ManyIsEmpty(argKeyShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_KEY] = argKeyShortHand
+	// } else if err := util.ManyIsEmpty(argKeyOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_KEY] = argKeyOption
+	// }
 
-	//Preferred:-T
-	var argTitleShortHand, argTitleOption = argOptionsMap[sys.OPTION_S_TITLE], argOptionsMap[sys.OPTION_L_TITLE]
-	if err := util.ManyIsEmpty(argTitleShortHand); err == nil {
+	//Preferred:-t
+	var argTitleShortHand, okTitleShortHand = argOptionsMap[sys.OPTION_S_TITLE]
+	var argTitleOption, okTitleOption = argOptionsMap[sys.OPTION_L_TITLE]
+	if okTitleShortHand {
 		optionMaps[sys.OPTION_S_TITLE] = argTitleShortHand
-	} else if err := util.ManyIsEmpty(argTitleOption); err == nil {
+	}
+	if okTitleOption {
 		optionMaps[sys.OPTION_S_TITLE] = argTitleOption
 	}
+	// if err := util.ManyIsEmpty(argTitleShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_TITLE] = argTitleShortHand
+	// } else if err := util.ManyIsEmpty(argTitleOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_TITLE] = argTitleOption
+	// }
 
-	//Preferred:-F
-	var argFilterShortHand, argFilterOption = argOptionsMap[sys.OPTION_S_FILTER], argOptionsMap[sys.OPTION_L_FILTER]
-	if err := util.ManyIsEmpty(argFilterShortHand); err == nil {
+	//Preferred:-f
+	var argFilterShortHand, okFilterShortHand = argOptionsMap[sys.OPTION_S_FILTER]
+	var argFilterOption, okFilterOption = argOptionsMap[sys.OPTION_L_FILTER]
+	if okFilterShortHand {
 		optionMaps[sys.OPTION_S_FILTER] = argFilterShortHand
-	} else if err := util.ManyIsEmpty(argFilterOption); err == nil {
+	}
+	if okFilterOption {
 		optionMaps[sys.OPTION_S_FILTER] = argFilterOption
 	}
+	// if err := util.ManyIsEmpty(argFilterShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_FILTER] = argFilterShortHand
+	// } else if err := util.ManyIsEmpty(argFilterOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_FILTER] = argFilterOption
+	// }
 
-	//Preferred:-Q
-	var _, okArgQuietShortHand = argOptionsMap[sys.OPTION_S_QUIET]
-	var _, okArgQuietOption = argOptionsMap[sys.OPTION_L_QUIET]
+	//Preferred:-q
+	var _, okQuietShortHand = argOptionsMap[sys.OPTION_S_QUIET]
+	var _, okQuietOption = argOptionsMap[sys.OPTION_L_QUIET]
 
-	if okArgQuietShortHand || okArgQuietOption {
+	if okQuietShortHand || okQuietOption {
 		optionMaps[sys.OPTION_S_QUIET] = "true"
 	}
 
-	//Preferred:-O
-	var argOutputShortHand, argOutputOption = argOptionsMap[sys.OPTION_S_OUTPUT], argOptionsMap[sys.OPTION_L_OUTPUT]
-	if err := util.ManyIsEmpty(argOutputShortHand); err == nil {
+	//Preferred:-o
+	var argOutputShortHand, okOutputShortHand = argOptionsMap[sys.OPTION_S_OUTPUT]
+	var argOutputOption, okOutputOption = argOptionsMap[sys.OPTION_L_OUTPUT]
+	if okOutputShortHand {
 		optionMaps[sys.OPTION_S_OUTPUT] = argOutputShortHand
-	} else if err := util.ManyIsEmpty(argOutputOption); err == nil {
+	}
+	if okOutputOption {
 		optionMaps[sys.OPTION_S_OUTPUT] = argOutputOption
 	}
-	//Preferred:-C
-	var argColumnsShortHand, argColumnsOption = argOptionsMap[sys.OPTION_S_COLUMNS], argOptionsMap[sys.OPTION_L_COLUMNS]
-	if err := util.ManyIsEmpty(argColumnsShortHand); err == nil {
+	// if err := util.ManyIsEmpty(argOutputShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_OUTPUT] = argOutputShortHand
+	// } else if err := util.ManyIsEmpty(argOutputOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_OUTPUT] = argOutputOption
+	// }
+
+	//Preferred:-c
+	var argColumnsShortHand, okColumnsShortHand = argOptionsMap[sys.OPTION_S_COLUMNS]
+	var argColumnsOption, okColumnsOption = argOptionsMap[sys.OPTION_L_COLUMNS]
+	if okColumnsShortHand {
 		optionMaps[sys.OPTION_S_COLUMNS] = argColumnsShortHand
-	} else if err := util.ManyIsEmpty(argColumnsOption); err == nil {
+	}
+	if okColumnsOption {
 		optionMaps[sys.OPTION_S_COLUMNS] = argColumnsOption
 	}
+	// if err := util.ManyIsEmpty(argColumnsShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_COLUMNS] = argColumnsShortHand
+	// } else if err := util.ManyIsEmpty(argColumnsOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_COLUMNS] = argColumnsOption
+	// }
 
-	//Preferred:-W
-	var _, okArgWideShortHand = argOptionsMap[sys.OPTION_S_WIDE]
-	var _, okArgWideOption = argOptionsMap[sys.OPTION_L_WIDE]
+	//Preferred:-w
+	var _, okWideShortHand = argOptionsMap[sys.OPTION_S_WIDE]
+	var _, okWideOption = argOptionsMap[sys.OPTION_L_WIDE]
 
-	if okArgWideShortHand || okArgWideOption {
+	if okWideShortHand || okWideOption {
 		optionMaps[sys.OPTION_S_WIDE] = "true"
 	}
 
-	//Preferred:-G
-	var argGroupShortHand, argGroupOption = argOptionsMap[sys.OPTION_S_GROUP], argOptionsMap[sys.OPTION_L_GROUP]
-	if err := util.ManyIsEmpty(argGroupShortHand); err == nil {
+	//Preferred:-g
+	var argGroupShortHand, okGroupShortHand = argOptionsMap[sys.OPTION_S_GROUP]
+	var argGroupOption, okGroupOption = argOptionsMap[sys.OPTION_L_GROUP]
+	if okGroupShortHand {
 		optionMaps[sys.OPTION_S_GROUP] = argGroupShortHand
-	} else if err := util.ManyIsEmpty(argGroupOption); err == nil {
+	}
+	if okGroupOption {
 		optionMaps[sys.OPTION_S_GROUP] = argGroupOption
 	}
+	// if err := util.ManyIsEmpty(argGroupShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_GROUP] = argGroupShortHand
+	// } else if err := util.ManyIsEmpty(argGroupOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_GROUP] = argGroupOption
+	// }
 
-	//Preferred:-S
-	var argSortShortHand, argSortOption = argOptionsMap[sys.OPTION_S_SORT], argOptionsMap[sys.OPTION_L_SORT]
-	if err := util.ManyIsEmpty(argSortShortHand); err == nil {
+	//Preferred:-s
+	var argSortShortHand, okSortShortHand = argOptionsMap[sys.OPTION_S_SORT]
+	var argSortOption, okSortOption = argOptionsMap[sys.OPTION_L_SORT]
+	if okSortShortHand {
 		optionMaps[sys.OPTION_S_SORT] = argSortShortHand
-	} else if err := util.ManyIsEmpty(argSortOption); err == nil {
+	}
+	if okSortOption {
 		optionMaps[sys.OPTION_S_SORT] = argSortOption
 	}
+	// if err := util.ManyIsEmpty(argSortShortHand); err == nil {
+	// 	optionMaps[sys.OPTION_S_SORT] = argSortShortHand
+	// } else if err := util.ManyIsEmpty(argSortOption); err == nil {
+	// 	optionMaps[sys.OPTION_S_SORT] = argSortOption
+	// }
 	return optionMaps, nil
 }
 
@@ -343,7 +422,7 @@ func GetOptionMapsByOutput(output string) (string, error) {
 func GetOptionMapsByGroup(group string) (string, error) {
 	var err = util.ManyIsEmpty(group)
 	if err != nil {
-		return "", errors.New("error: title cannot be empty")
+		return "", errors.New("error: group cannot be empty")
 	}
 	return group, nil
 }

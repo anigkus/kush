@@ -45,7 +45,7 @@ func SearchHelpRun(searchArgs []string) {
 
 // SearchHelpOptionValidate check terminal option arguments
 //
-// Option: "-A", "-P", "-U", "-T", "-G", "-F", "-C", "-S"
+// Option: "-a", "-p", "-u", "-t", "-g", "-f", "-c", "-s"
 func SearchHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, error) {
 	var keyError []string
 	for key := range argOptionsMap {
@@ -62,49 +62,49 @@ func SearchHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 		return entity.Option{}, err
 	}
 
-	//-A
+	//-a
 	var mAdderess, okAdderess = optionMaps[sys.OPTION_S_ADDRESS]
 	if okAdderess {
 		if _, err = entity.GetOptionMapsByAddress(mAdderess); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-P
+	//-p
 	var mPort, okPort = optionMaps[sys.OPTION_S_PORT]
 	if okPort {
 		if _, err = entity.GetOptionMapsByPort(mPort); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-U
+	//-u
 	var mUsername, okUsername = optionMaps[sys.OPTION_S_USERNAME]
 	if okUsername {
 		if _, err = entity.GetOptionMapsByUsername(mUsername); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-T
+	//-t
 	var mTitle, okTitle = optionMaps[sys.OPTION_S_TITLE]
 	if okTitle {
 		if _, err = entity.GetOptionMapsByTitle(mTitle); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-G
+	//-g
 	var mGroup, okGroup = optionMaps[sys.OPTION_S_GROUP]
 	if okGroup {
 		if _, err = entity.GetOptionMapsByGroup(mGroup); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-F
+	//-f
 	var mFilter, okFilter = optionMaps[sys.OPTION_S_FILTER]
 	if okFilter {
 		if _, err = entity.GetOptionMapsByFilter(mFilter); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-C
+	//-c
 	var mColumns, okColumns = optionMaps[sys.OPTION_S_COLUMNS]
 	if okColumns {
 		var _, err = entity.GetOptionMapsByColumns(mColumns)
@@ -112,7 +112,7 @@ func SearchHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 			return entity.Option{}, err
 		}
 	}
-	//-S
+	//-s
 	var mSort, okSort = optionMaps[sys.OPTION_S_SORT]
 	if okSort {
 		var _, err = entity.GetOptionMapsBySort(mSort)
@@ -126,7 +126,7 @@ func SearchHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 
 // SearchHelpOptionMapsToOption convert terminal option arguments to option struct
 //
-// Assembly parameters: "-A", "-P", "-U", "-T", "-G", "-F", "-C", "-S"
+// Assembly parameters: "-a", "-p", "-u", "-t", "-g", "-f", "-c", "-s"
 func SearchHelpOptionMapsToOption(optionMaps map[string]string) (entity.Option, error) {
 	var option = entity.Option{}
 
@@ -180,8 +180,8 @@ func SearchHelpUsagePrintText() string {
 
 // SearchHelpUsage print Search command help usage
 func SearchHelpUsage() {
-	var printText = `kush search -A 192.168.1.1 
-kush search -A test.host1.com -F 'GROUP=group1' -S ADDRESS
+	var printText = `kush search -a 192.168.1.1 
+kush search -a test.host1.com -f 'GROUP=group1' -ss ADDRESS
 ` + SearchHelpUsagePrintText()
 	util.ExitPrintln(printText)
 }

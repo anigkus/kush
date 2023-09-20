@@ -45,7 +45,7 @@ func RemoveHelpRun(removeArgs []string) {
 
 // RemoveHelpOptionValidate check terminal option arguments
 //
-// Option: "-A", "-P", "-U", "-T", "-G", "-F"
+// Option: "-a", "-p", "-u", "-t", "-g", "-f"
 func RemoveHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, error) {
 	var keyError []string
 	for key := range argOptionsMap {
@@ -62,42 +62,42 @@ func RemoveHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 		return entity.Option{}, err
 	}
 
-	//-A
+	//-a
 	var mAdderess, okAdderess = optionMaps[sys.OPTION_S_ADDRESS]
 	if okAdderess {
 		if _, err = entity.GetOptionMapsByAddress(mAdderess); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-P
+	//-p
 	var mPort, okPort = optionMaps[sys.OPTION_S_PORT]
 	if okPort {
 		if _, err = entity.GetOptionMapsByPort(mPort); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-U
+	//-u
 	var mUsername, okUsername = optionMaps[sys.OPTION_S_USERNAME]
 	if okUsername {
 		if _, err = entity.GetOptionMapsByUsername(mUsername); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-T
+	//-t
 	var mTitle, okTitle = optionMaps[sys.OPTION_S_TITLE]
 	if okTitle {
 		if _, err = entity.GetOptionMapsByTitle(mTitle); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-G
+	//-g
 	var mGroup, okGroup = optionMaps[sys.OPTION_S_GROUP]
 	if okGroup {
 		if _, err = entity.GetOptionMapsByGroup(mGroup); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-F
+	//-f
 	var mFilter, okFilter = optionMaps[sys.OPTION_S_FILTER]
 	if okFilter {
 		if _, err = entity.GetOptionMapsByFilter(mFilter); err != nil {
@@ -109,7 +109,7 @@ func RemoveHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 
 // RemoveHelpOptionMapsToOption convert terminal option arguments to option struct
 //
-// Assembly parameters: "-A", "-P", "-U", "-T", "-G", "-F", "-Q"
+// Assembly parameters: "-a", "-p", "-u", "-t", "-g", "-f", "-q"
 func RemoveHelpOptionMapsToOption(optionMaps map[string]string) (entity.Option, error) {
 	var option = entity.Option{}
 
@@ -157,9 +157,9 @@ func RemoveHelpUsagePrintText() string {
 
 // RemoveHelpUsage print Remove command help usage
 func RemoveHelpUsage() {
-	var printText = `kush remove -A 192.168.1.1 -U root -P 22 
-kush remove -A 192.168.1.1 -U root -P 22 -Q
-kush remove -A 192.168.1.1 -F 'GROUP=group1' -Q
+	var printText = `kush remove -a 192.168.1.1 -u root -p 22 
+kush remove -a 192.168.1.1 -u root -P 22 -q
+kush remove -a 192.168.1.1 -f 'GROUP=group1' -q
 ` + RemoveHelpUsagePrintText()
 	util.ExitPrintln(printText)
 }

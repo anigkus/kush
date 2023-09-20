@@ -18,7 +18,7 @@ import (
 )
 
 func TestArgStringToMap(t *testing.T) {
-	argString := "-H x -j 12 -F GROUP=group1 -X 1"
+	argString := "-h x -j 12 -f GROUP=group1 -x 1"
 	fmt.Println(argString)
 	var mapResult, err = StringToMap(argString)
 	if err != nil {
@@ -27,7 +27,7 @@ func TestArgStringToMap(t *testing.T) {
 		fmt.Println(mapResult)
 	}
 
-	argString = "-H x -j 12 -F GROUP=group1 -U"
+	argString = "-h x -j 12 -f GROUP=group1 -u"
 	fmt.Println(argString)
 	mapResult, err = StringToMap(argString)
 	if err != nil {
@@ -39,11 +39,11 @@ func TestArgStringToMap(t *testing.T) {
 }
 
 func TestArrayToMap(t *testing.T) {
-	// argString := "-H x -j 12 -F GROUP=group1 -X"
-	// argString := "-H 192.168.1.1 -W -C 'ADDRESS,USER' -Q"
-	// argString := "-H 192.168.1.1 -W --output json -C 'ADDRESS,USER' -Q"
-	argString := "-H 192.168.1.1 -W --output json -C 'ADDRESS,USER' -Q -P 123-123 -I"
-	// argString := "-H 192.168.1.1 -W --output json -C 'ADDRESS,USER' -Q -P 123-123 -F 'ADDRESS = 1.1.1.1 || USER = user' -I"
+	// argString := "-h x -j 12 -f GROUP=group1 -x"
+	// argString := "-h 192.168.1.1 -w -c 'ADDRESS,USER' -q"
+	// argString := "-h 192.168.1.1 -w --output json -c 'ADDRESS,USER' -q"
+	argString := "-h 192.168.1.1 -w --output json -c 'ADDRESS,USER' -q -p 123-123 -i"
+	// argString := "-h 192.168.1.1 -w --output json -c 'ADDRESS,USER' -q -p 123-123 -f 'ADDRESS = 1.1.1.1 || USER = user' -i"
 	fmt.Println(argString)
 	//
 	//var reg = regexp.MustCompile(`\s+(')?.*!?\s+(')?`) //\s+(')?.*(')?
@@ -60,18 +60,18 @@ func TestArrayToMap(t *testing.T) {
 }
 
 func TestDirectJoin(t *testing.T) {
-	// argString := "root@192.168.1.1 -X 12345"
-	// argString := "root@192.168.1.1 -X 12345 -P 22"
+	// argString := "root@192.168.1.1 -x 12345"
+	// argString := "root@192.168.1.1 -x 12345 -p 22"
 
-	// argString := "-X 12345 root@192.168.1.1 "
-	argString := "-X 12345 root@192.168.1.1 -P 22"
+	// argString := "-x 12345 root@192.168.1.1 "
+	argString := "-x 12345 root@192.168.1.1 -p 22"
 
 	//bad
-	// argString := "-X root@192.168.1.1"
-	// argString := "-K root@192.168.1.1"
-	// argString := "-X 123456"
-	//argString := "root@192.168.1.1 -A 123 -U abc -P 22"
-	// argString := "-A 123 -U abc -P 22"
+	// argString := "-x root@192.168.1.1"
+	// argString := "-k root@192.168.1.1"
+	// argString := "-x 123456"
+	//argString := "root@192.168.1.1 -a 123 -u abc -p 22"
+	// argString := "-a 123 -u abc -p 22"
 	fmt.Println(argString)
 	var mapResult, err = DirectStringToMap(argString)
 	if err != nil {
@@ -82,15 +82,15 @@ func TestDirectJoin(t *testing.T) {
 }
 
 func TestManyIsEmpty(t *testing.T) {
-	argString := "-H x -j 12 -F GROUP=group1 -X"
+	argString := "-h x -j 12 -f GROUP=group1 -x"
 	var elements []string = strings.Split(argString, " ")
 	var mapResult, err = StringArrayToMap(elements)
 	if err != nil {
 		t.Errorf("call ArrayToMap: %s", err)
 	}
 	fmt.Println(mapResult)
-	fmt.Println(ManyIsEmpty(mapResult["-H"])) //nil
-	fmt.Println(ManyIsEmpty(mapResult["-I"])) //element emtpy
+	fmt.Println(ManyIsEmpty(mapResult["-h"])) //nil
+	fmt.Println(ManyIsEmpty(mapResult["-i"])) //element emtpy
 }
 
 func TestTrim(t *testing.T) {
@@ -165,7 +165,7 @@ func TestInsertDataPathJsonFile(t *testing.T) {
 		Password: "123456",
 		Group:    "Alice",
 		Title:    "Alice",
-		Authtype: "-X",
+		Authtype: "-x",
 	}
 
 	host2 := cli.Host{
@@ -175,7 +175,7 @@ func TestInsertDataPathJsonFile(t *testing.T) {
 		Key:      "~/b.pem",
 		Group:    "Bob",
 		Title:    "Bob",
-		Authtype: "-K",
+		Authtype: "-k",
 	}
 	host3 := cli.Host{
 		Address:  "100.101.102.103",
@@ -184,7 +184,7 @@ func TestInsertDataPathJsonFile(t *testing.T) {
 		Key:      "~/a.pem",
 		Group:    "Cici",
 		Title:    "Cici",
-		Authtype: "-K",
+		Authtype: "-k",
 	}
 	err := CreateDataPathJsonFile(host3, host1, host2)
 	if err != nil {
@@ -197,7 +197,7 @@ func TestSearchDataPathJsonFile(t *testing.T) {
 	argfilter = "ADDRESS =  100.101.102.103"
 	argfilter = "USERNAME =  Cici"
 	argfilter = "PORT =  50"
-	argfilter = "AUTHTYPE =  -K "
+	argfilter = "AUTHTYPE =  -k "
 	argfilter = "GROUP =  Cici"
 	argfilter = "TITLE =  Cici"
 	argfilter = "ADDRESS = 10.11.12.13 && USERNAME = Bob"
@@ -255,7 +255,7 @@ func TestSortMap(t *testing.T) {
 		"Password": "123456",
 		"Group":    "Alice",
 		"Title":    "Alice",
-		"Authtype": "-X",
+		"Authtype": "-x",
 	}
 	var searchhostmap2 map[string]string = map[string]string{
 		"Address":  "10.11.12.13",
@@ -264,7 +264,7 @@ func TestSortMap(t *testing.T) {
 		"Key":      "~/b.pem",
 		"Group":    "Bob",
 		"Title":    "Bob",
-		"Authtype": "-K",
+		"Authtype": "-k",
 	}
 	var searchhostmap3 map[string]string = map[string]string{
 		"Address":  "100.101.102.103",
@@ -273,7 +273,7 @@ func TestSortMap(t *testing.T) {
 		"Key":      "~/a.pem",
 		"Group":    "Cici",
 		"Title":    "Cici",
-		"Authtype": "-K",
+		"Authtype": "-k",
 	}
 	searchhostmaps = append(searchhostmaps, searchhostmap3, searchhostmap1, searchhostmap2)
 	jsonStr, err := json.MarshalIndent(searchhostmaps, "", "")
@@ -312,7 +312,7 @@ func TestContains(t *testing.T) {
 	// 	Password: "123456",
 	// 	Group:    "Alice",
 	// 	Title:    "Alice",
-	// 	Authtype: "-X",
+	// 	Authtype: "-x",
 	// }
 
 	// host2 := cli.Host{
@@ -322,7 +322,7 @@ func TestContains(t *testing.T) {
 	// 	Key:      "~/b.pem",
 	// 	Group:    "Bob",
 	// 	Title:    "Bob",
-	// 	Authtype: "-K",
+	// 	Authtype: "-k",
 	// }
 	// host3 := cli.Host{
 	// 	Address:  "100.101.102.103",
@@ -331,7 +331,7 @@ func TestContains(t *testing.T) {
 	// 	Key:      "~/a.pem",
 	// 	Group:    "Cici",
 	// 	Title:    "Cici",
-	// 	Authtype: "-K",
+	// 	Authtype: "-k",
 	// }
 	// var elements []string = []string{}
 	// elements = append(elements, host1.String())

@@ -45,7 +45,7 @@ func ExportHelpRun(exportArgs []string) {
 
 // ExportHelpOptionValidate check terminal option arguments
 //
-// Option: "-A", "-P", "-U", "-T", "-G", "-F", "-C", "-O"
+// Option: "-a", "-p", "-u", "-t", "-g", "-f", "-c", "-o"
 func ExportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, error) {
 	var keyError []string
 	for key := range argOptionsMap {
@@ -62,49 +62,49 @@ func ExportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 		return entity.Option{}, err
 	}
 
-	//-A
+	//-a
 	var mAdderess, okAdderess = optionMaps[sys.OPTION_S_ADDRESS]
 	if okAdderess {
 		if _, err = entity.GetOptionMapsByAddress(mAdderess); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-P
+	//-p
 	var mPort, okPort = optionMaps[sys.OPTION_S_PORT]
 	if okPort {
 		if _, err = entity.GetOptionMapsByPort(mPort); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-U
+	//-u
 	var mUsername, okUsername = optionMaps[sys.OPTION_S_USERNAME]
 	if okUsername {
 		if _, err = entity.GetOptionMapsByUsername(mUsername); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-T
+	//-t
 	var mTitle, okTitle = optionMaps[sys.OPTION_S_TITLE]
 	if okTitle {
 		if _, err = entity.GetOptionMapsByTitle(mTitle); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-G
+	//-g
 	var mGroup, okGroup = optionMaps[sys.OPTION_S_GROUP]
 	if okGroup {
 		if _, err = entity.GetOptionMapsByGroup(mGroup); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-F
+	//-f
 	var mFilter, okFilter = optionMaps[sys.OPTION_S_FILTER]
 	if okFilter {
 		if _, err = entity.GetOptionMapsByFilter(mFilter); err != nil {
 			return entity.Option{}, err
 		}
 	}
-	//-C
+	//-c
 	var mColumns, okColumns = optionMaps[sys.OPTION_S_COLUMNS]
 	if okColumns {
 		var _, err = entity.GetOptionMapsByColumns(mColumns)
@@ -112,7 +112,7 @@ func ExportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 			return entity.Option{}, err
 		}
 	}
-	// -O
+	// -o
 	var mOutput, okOutput = optionMaps[sys.OPTION_S_OUTPUT]
 	if okOutput {
 		var _, err = entity.GetOptionMapsByOutput(mOutput)
@@ -125,7 +125,7 @@ func ExportHelpOptionValidate(argOptionsMap map[string]string) (entity.Option, e
 
 // ExportHelpOptionMapsToOption convert terminal option arguments to option struct
 //
-// Assembly parameters: "-A", "-P", "-U", "-T", "-G", "-F", "-C", "-O"
+// Assembly parameters: "-a", "-p", "-u", "-t", "-g", "-f", "-c", "-o"
 func ExportHelpOptionMapsToOption(optionMaps map[string]string) (entity.Option, error) {
 	var option = entity.Option{}
 

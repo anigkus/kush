@@ -24,23 +24,28 @@ COMMAND:
   import    Import the kush for file
 	
 OPTIONS:
-  -A, --address         [required] Address 
-  -P, --port            [optional] Port, DEFAULT:22
-  -U, --username        [optional] Username, DEFAULT:root
-  -X, --password        [required] Password, Can only choose one( -X | -K )
-  -K, --key             [required] Key, Can only choose one( -X | -K )
-  -T, --title           [optional] Title
-  -F, --filter          [optional] Filter( ADDRESS , USER , PORT , AUTHTYPE , AUTH , GROUP , TITLE )
-  -Q, --quiet           [optional] Quiet
-  -O, --output          [optional] Output, DEFAULT:json
-  -C, --columns         [optional] columns( ADDRESS , USER , PORT ,AUTHTYPE , AUTH , GROUP , TITLE )
-  -W, --wide            [optional] Wide
-  -G, --group           [optional] Group, DEFAULT:default
-  -S, --sort            [optional] Sort[ASC]( ADDRESS , USER , PORT , AUTHTYPE , GROUP ), DEFAULT:ADDRESS
-  -V, --version         version
-  -H, --help            help
+  -a, --address         [required] Address 
+  -p, --port            [optional] Port, DEFAULT:22
+  -u, --username        [optional] Username, DEFAULT:root
+  -x, --password        [required] Password, Can only choose one( -x | -k )
+  -k, --key             [required] Key, Can only choose one( -x | -k )
+  -t, --title           [optional] Title
+  -f, --filter          [optional] Filter( ADDRESS , USER , PORT , AUTHTYPE , AUTH , GROUP , TITLE )
+  -q, --quiet           [optional] Quiet
+  -o, --output          [optional] Output, DEFAULT:json
+  -c, --columns         [optional] columns( ADDRESS , USER , PORT ,AUTHTYPE , AUTH , GROUP , TITLE )
+  -w, --wide            [optional] Wide
+  -g, --group           [optional] Group, DEFAULT:default
+  -s, --sort            [optional] Sort[ASC]( ADDRESS , USER , PORT , AUTHTYPE , GROUP ), DEFAULT:ADDRESS
+  -v, --version         version
+  -h, --help            help
 
 Run 'kush COMMAND --help' for more information on a command.
+
+Direct Connection:
+
+kush user@host -x 123456
+kush user@host -k ~/.ssh/id_rsa_github.pub
 
 To get more help with kush, check out our guides at https://github.com/anigkus/kush`
 	util.ExitPrintln(printText)

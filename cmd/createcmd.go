@@ -18,7 +18,7 @@ import (
 // CreateCmdRun create command cmd entry
 func CreateCmdRun(option entity.Option) {
 	if len(option.Password) > 0 && len(option.Key) > 0 {
-		var printText = fmt.Sprintf("error:% s", "can only choose one( -X | -K )")
+		var printText = fmt.Sprintf("error:%s", "can only choose one( -x | -k )")
 		util.ExitPrintln(printText)
 	}
 	var addhost = cli.Host{}
@@ -62,10 +62,13 @@ func ConfirmInformation(host cli.Host) string {
 	case sys.AUTHTYPE_K:
 		securetext = "Key: " + host.Key
 	case sys.AUTHTYPE_X:
-		securetext = "Password: " + host.Password
+		// bytePassword := []byte(host.Password)
+		// resBytes, _ := bcrypt.GenerateFromPassword(bytePassword, 15) //string(resBytes)
+		// err := bcrypt.CompareHashAndPassword(resBytes, bytePassword)
+		securetext = "Password: ******"
 	}
 	return fmt.Sprintf(
-		"%s\n%s\n%s\n%s\n%s\n%s\n",
+		"%s\n%s\n%s\n%s\n%s\n%s",
 		"Address: "+host.Address,
 		"Username: "+host.Username,
 		"Port: "+strconv.Itoa(int(host.Port)),
