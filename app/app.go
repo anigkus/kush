@@ -77,14 +77,14 @@ func Main(args []string) {
 // DirectHandler
 func DirectHandler(argOptionsMap map[string]string) entity.Option {
 	var option = entity.Option{}
-	var mAdddress = argOptionsMap["-A"]
+	var mAdddress = argOptionsMap[sys.OPTION_S_ADDRESS]
 	var address, err = entity.GetOptionMapsByAddress(mAdddress)
 	if err != nil {
 		util.ExitPrintln(fmt.Sprint(err))
 	} else {
 		option.SetAddress(address)
 	}
-	var mPort, okPort = argOptionsMap["-P"]
+	var mPort, okPort = argOptionsMap[sys.OPTION_S_PORT]
 	if okPort {
 		var port, err = entity.GetOptionMapsByPort(mPort)
 		if err != nil {
@@ -94,7 +94,7 @@ func DirectHandler(argOptionsMap map[string]string) entity.Option {
 	} else {
 		option.SetPort(sys.DEFAULT_PORT)
 	}
-	var mUsername, okUsername = argOptionsMap["-U"]
+	var mUsername, okUsername = argOptionsMap[sys.OPTION_S_USERNAME]
 	if okUsername {
 		var username, err = entity.GetOptionMapsByUsername(mUsername)
 		if err != nil {
@@ -102,13 +102,13 @@ func DirectHandler(argOptionsMap map[string]string) entity.Option {
 		}
 		option.SetUsername(username)
 	}
-	var mPassword, okPassword = argOptionsMap["-X"]
-	var mKey, okKey = argOptionsMap["-K"]
+	var mPassword, okPassword = argOptionsMap[sys.OPTION_S_PASSWORD]
+	var mKey, okKey = argOptionsMap[sys.OPTION_S_KEY]
 	if !okPassword && !okKey {
-		util.ExitPrintln("error: required choose one( -X | -K )")
+		util.ExitPrintln("error: required choose one( -x | -k )")
 	}
 	if okPassword && okKey {
-		util.ExitPrintln("error: can only choose one( -X | -K )")
+		util.ExitPrintln("error: can only choose one( -x | -k )")
 	}
 	if okPassword {
 		var password, err = entity.GetOptionMapsByPassword(mPassword)
