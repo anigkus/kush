@@ -40,12 +40,12 @@ if [ ! -z "$V_GOOS" ] || [ ! -z "$V_GOARCH" ]; then
         V_ARCH='32'
     fi
     V_GOARCH=${V_GOARCH:-${V_ARCH}}
-    CGO_ENABLED=0 GOOS=$V_GOOS GOARCH=$V_GOARCH go build -ldflags="-s -w" -o build/$V_GOOS/$V_GOARCH/$V_FILE  && cd build/$V_GOOS/$V_GOARCH && tar -czf kush_"$V_GOOS"_"$V_ARCH".tar.gz $V_FILE && rm -f $V_FILE && cd -
+    rm -rf build/$V_GOOS/$V_GOARCH && CGO_ENABLED=0 GOOS=$V_GOOS GOARCH=$V_GOARCH go build -ldflags="-s -w" -o build/$V_GOOS/$V_GOARCH/$V_FILE && cd build/$V_GOOS/$V_GOARCH && tar -czf kush_"$V_GOOS"_"$V_ARCH".tar.gz $V_FILE && rm -f $V_FILE && cd -
 else
     OS="`uname`"
     case $OS in
     'Linux')
-        #CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o build/linux/amd64/kush && upx --best --lzma build/linux/amd64/kush && cd build/linux/amd64 && tar -czf kush_linux_amd64.tar.gz kush && rm -f kush && cd -
+        rm -rf build/linux/amd64 && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o build/linux/amd64/kush && cd build/linux/amd64 && tar -czf kush_linux_amd64.tar.gz kush && rm -f kush && cd -
         ;;
     'FreeBSD')
         echo "Unsupported OS"
@@ -56,7 +56,7 @@ else
         exit 1
         ;;
     'Darwin') 
-        #CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o build/darwin/amd64/kush && upx --best --lzma build/darwin/amd64/kush && cd build/darwin/amd64 && tar -czf kush_darwin_amd64.tar.gz kush && rm -f kush && cd -
+        rm -rf build/darwin/amd64 && CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags="-s -w" -o build/darwin/amd64/kush && cd build/darwin/amd64 && tar -czf kush_darwin_amd64.tar.gz kush && rm -f kush && cd -
         ;;
     'SunOS')
         echo "Unsupported OS"
