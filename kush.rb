@@ -2,7 +2,7 @@ class Kush < Formula
   desc "Cross-platform command-line SSH remote address connection tool"
   homepage "https://github.com/anigkus/kush"
   url "https://github.com/anigkus/kush/archive/refs/tags/v0.0.1.tar.gz"
-  sha256 "7bba03df7e6a1d8aeeb60942d49dd469ed0f06f1561c8589fa1647fdb671ecb9"
+  sha256 "cce811fa7ff33874ba63bea4395f7847eb67a3ce7ebc423f0ff446a5aaa64570"
   license "Apache-2.0"
   head "https://github.com/anigkus/kush.git", branch: "main"
   depends_on "go" => :build
